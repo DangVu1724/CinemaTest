@@ -1,0 +1,26 @@
+mobile_testing_app/tests/BookingTest.java
+ mobile_testing_app.tests.BookingTest
+mobile_testing_app/tests/TicketTest.java
+ mobile_testing_app.tests.TicketTest
+mobile_testing_app/BaseTest.java
+ mobile_testing_app.BaseTest
+mobile_testing_app/tests/LogoutTest.java
+ mobile_testing_app.tests.LogoutTest
+mobile_testing_app/utils/AppiumUtils.java
+ mobile_testing_app.utils.AppiumUtils
+mobile_testing_app/tests/LoginTest.java
+ mobile_testing_app.tests.LoginTest
+mobile_testing_app/MobileTesting.java
+ mobile_testing_app.MobileTesting
+mobile_testing_app/Main.java
+ mobile_testing_app.Main
+mobile_testing_app/tests/MovieListTest.java
+ mobile_testing_app.tests.MovieListTest
+mobile_testing_app/tests/MovieHubTest.java
+ mobile_testing_app.tests.MovieHubTest
+mobile_testing_app/tests/GiftTest.java
+ mobile_testing_app.tests.GiftTest
+mobile_testing_app/Assignment.java
+ mobile_testing_app.Assignment
+mobile_testing_app/tests/ProfileTest.java
+ mobile_testing_app.tests.ProfileTest
