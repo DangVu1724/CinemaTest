@@ -20,7 +20,7 @@ public class LoginTest extends BaseTest{
             navigateToLogin2();
             testLoginWrongFormat("tester", "password123");
             testLoginFailed("testuser@example.com", "password123");
-            testLoginSuccess("0375302679", "Dangvu01072004");
+            testLoginSuccess("0375302679", "Vudang01072004@");
         } catch (Exception e) {
             System.err.println("Error during login tests: " + e.getMessage());
         }

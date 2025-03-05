@@ -15,6 +15,7 @@ public class Main {
 			capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
 			capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13");
 			capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 8 Pro API 33");
+
 			capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 60);
 			capabilities.setCapability("appPackage", "com.cgv.cinema.vn");
 			capabilities.setCapability("appActivity", "com.cgv.cinema.vn.ui.MainActivity");

@@ -16,7 +16,9 @@ public class GiftTest extends BaseTest {
 
     public void runGiftTests() {
         try {
+            closeAd();
             goToHomePageMenu();
+            closeAd();
             testGiftSection();
         } catch (Exception e) {
             System.err.println("Error during Gift tests: " + e.getMessage());

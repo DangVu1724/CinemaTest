@@ -18,7 +18,7 @@ public class BookingTest extends BaseTest {
     public void runBookingTests() {
         try {
             closeAd();
-            selectMovieByID("3");
+            selectMovieByID("4");
             watchTrailer();
             testMovieBooking();
             goToHomePageMenu();
@@ -82,7 +82,7 @@ public class BookingTest extends BaseTest {
             System.out.println("Clicked initial 'Book Now' to select cinema and showtime.");
             Thread.sleep(5000);
 
-            selectCinemaAndShowtime("3");
+            selectCinemaAndShowtime("7");
 
             System.out.println("Testing 'Buy Now' without selecting seats...");
             if (!clickBuyNow()) {
@@ -122,6 +122,9 @@ public class BookingTest extends BaseTest {
             }
 
             testAddItem();
+            clickBuyNow();
+            Thread.sleep(2000);
+            clickBuyNow();
 
         } catch (Exception e) {
             System.err.println("Error during movie booking test: " + e.getMessage());
@@ -136,6 +139,7 @@ public class BookingTest extends BaseTest {
             boolean cinemaFound = false;
             int maxSwipes = 5;
             int swipeCount = 0;
+            boolean regionClicked = false;
 
             while (!cinemaFound && swipeCount < maxSwipes) {
                 try {
@@ -147,35 +151,43 @@ public class BookingTest extends BaseTest {
                     cinemaFound = true;
                 } catch (Exception e) {
                     System.out.println("Cinema 'CGV Vincom Royal City' not found in current view.");
-                    AndroidElement regionButton = (AndroidElement) wait.until(
-                            ExpectedConditions.elementToBeClickable(By.id("com.cgv.cinema.vn:id/lin_region"))
-                    );
-                    regionButton.click();
-                    System.out.println("Clicked region button.");
 
-                    String regionXpath = "//androidx.recyclerview.widget.RecyclerView[@resource-id='com.cgv.cinema.vn:id/rcv']/android.widget.LinearLayout[1]";
+                    if (!regionClicked) {
+                        // Chỉ click vào region khi lần đầu tiên không tìm thấy rạp
+                        AndroidElement regionButton = (AndroidElement) wait.until(
+                                ExpectedConditions.elementToBeClickable(By.id("com.cgv.cinema.vn:id/lin_region"))
+                        );
+                        regionButton.click();
+                        System.out.println("Clicked region button.");
+                        regionClicked = true; // Đánh dấu là đã click region
 
-                    boolean regionFound = false;
-                    int maxRegionSwipes = 5;
-                    int regionSwipeCount = 0;
+                        String regionXpath = "//androidx.recyclerview.widget.RecyclerView[@resource-id='com.cgv.cinema.vn:id/rcv']/android.widget.LinearLayout[1]";
 
-                    while (!regionFound && regionSwipeCount < maxRegionSwipes) {
-                        try {
-                            AndroidElement regionElement = (AndroidElement) wait.until(
-                                    ExpectedConditions.elementToBeClickable(By.xpath(regionXpath))
-                            );
-                            regionElement.click();
-                            regionFound = true;
-                        } catch (Exception ex) {
-                            System.out.println("Region 'Hà Nội (13)' not found. Scrolling down...");
-                            scrollUsingCoordinatesDown(driver);
-                            regionSwipeCount++;
+                        boolean regionFound = false;
+                        int maxRegionSwipes = 5;
+                        int regionSwipeCount = 0;
+
+                        while (!regionFound && regionSwipeCount < maxRegionSwipes) {
+                            try {
+                                AndroidElement regionElement = (AndroidElement) wait.until(
+                                        ExpectedConditions.elementToBeClickable(By.xpath(regionXpath))
+                                );
+                                regionElement.click();
+                                regionFound = true;
+                            } catch (Exception ex) {
+                                System.out.println("Region not found. Scrolling down...");
+                                AppiumUtils.scrollUsingCoordinatesDown(driver);
+                                regionSwipeCount++;
+                            }
                         }
-                    }
 
-                    if (!regionFound) {
-                        System.err.println("Region 'Hà Nội (13)' not found after " + maxRegionSwipes + " swipes.");
-                        return;
+                        if (!regionFound) {
+                            System.err.println("Region not found after " + maxRegionSwipes + " swipes.");
+                            return;
+                        }
+                    } else {
+                        // Nếu đã click region rồi, chỉ cần vuốt xuống để tìm rạp
+                        AppiumUtils.scrollUsingCoordinatesDown(driver);
                     }
                     swipeCount++;
                 }
@@ -186,7 +198,7 @@ public class BookingTest extends BaseTest {
                 return;
             }
 
-            String showTimeXpath = "//android.widget.Button[@resource-id='com.cgv.cinema.vn:id/show_time' and @text='12:10']";
+            String showTimeXpath = "//android.widget.Button[@resource-id='com.cgv.cinema.vn:id/show_time' and @text='16:30']";
             boolean showTimeSelected = false;
             int maxRetries = 5;
             int retryCount = 0;
@@ -197,7 +209,16 @@ public class BookingTest extends BaseTest {
                             ExpectedConditions.elementToBeClickable(By.xpath(showTimeXpath))
                     );
                     showTimeButton.click();
-                    System.out.println("Clicked showtime: 18:40");
+                    System.out.println("Clicked showtime: 16:30");
+
+                    // Kiểm tra nếu element com.cgv.cinema.vn:id/app_bar xuất hiện
+                    try {
+                        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.cgv.cinema.vn:id/app_bar")));
+                        System.out.println("Detected app_bar, initiating login...");
+                        performLoginSuccess(); // Thực hiện đăng nhập thành công
+                    } catch (Exception noAppBar) {
+                        System.out.println("No app_bar detected, proceeding without login.");
+                    }
 
                     try {
                         wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -207,7 +228,7 @@ public class BookingTest extends BaseTest {
                         navigateBackMultipleTimes(1);
                         retryCount++;
                     } catch (Exception noError) {
-                        System.out.println("Selected showtime: 18:40");
+                        System.out.println("Selected showtime: 16:30");
                         showTimeSelected = true;
                     }
                 } catch (Exception e) {
@@ -227,6 +248,7 @@ public class BookingTest extends BaseTest {
             System.err.println("Error during cinema and showtime selection: " + e.getMessage());
         }
     }
+
 
     private void selectDate(String date) {
         try {
@@ -453,5 +475,34 @@ public class BookingTest extends BaseTest {
             System.err.println("Error during add item test: " + e.getMessage());
         }
     }
+
+    // Thêm phương thức mới để thực hiện đăng nhập thành công
+    private void performLoginSuccess() {
+        try {
+            String sdt = "0375302679";
+            String password = "Dangvu01072004@";
+
+            AndroidElement emailField = (AndroidElement) wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.cgv.cinema.vn:id/edt_email_phone")));
+            emailField.clear();
+            emailField.sendKeys(sdt);
+
+            AndroidElement passwordField = (AndroidElement) driver.findElement(By.id("com.cgv.cinema.vn:id/edt_password"));
+            passwordField.clear();
+            passwordField.sendKeys(password);
+
+            AndroidElement loginButton = (AndroidElement) driver.findElement(By.id("com.cgv.cinema.vn:id/btn_login"));
+            loginButton.click();
+
+            System.out.println("Entered correct login credentials and clicked login.");
+
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.cgv.cinema.vn:id/main_container")));
+            System.out.println("Login successful, proceeding with booking.");
+
+        } catch (Exception e) {
+            System.err.println("Error during login in booking process: " + e.getMessage());
+        }
+    }
+
+
 
 }

@@ -14,6 +14,7 @@ public class MovieListTest extends BaseTest {
 
     public void runMovieListTests() {
         try {
+            closeAd();
             testSpecialMovies();
             Thread.sleep(5000);
             testComingSoonMovies();

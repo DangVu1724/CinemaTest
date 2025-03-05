@@ -14,9 +14,13 @@ public class TicketTest extends BaseTest {
 
     public void runTicketTests() {
         try {
+            closeAd();
             goToHomePageMenu();
+            closeAd();
             navigateToTicket();
+            Thread.sleep(5000);
             gotoUnwatchMovie();
+            Thread.sleep(5000);
             gotoWatchMovie();
         } catch (Exception e) {
             System.err.println("Error during ticket tests: " + e.getMessage());

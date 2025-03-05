@@ -41,9 +41,9 @@ public class AppiumUtils  {
         try {
             Dimension size = driver.manage().window().getSize();
             int startX = size.width / 2;
-            int startY = (int) (size.height * 0.3);
+            int startY = (int) (size.height * 0.7);
             int endX = size.width / 2;
-            int endY = (int) (size.height * 0.7);
+            int endY = (int) (size.height * 0.3);
 
             PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
 

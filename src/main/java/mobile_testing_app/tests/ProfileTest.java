@@ -21,7 +21,7 @@ public class ProfileTest extends BaseTest {
         try {
             goToHomePageMenu();
             navigateToProfile();
-            gotoAccountInfo("Dangvu01072004");
+            gotoAccountInfo("Vudang01072004@");
             updateProfileInfo("Dang Vu");
 
             // Test đổi mật khẩu sai
@@ -31,7 +31,7 @@ public class ProfileTest extends BaseTest {
             navigateBackToProfile();
 
             // Test đổi mật khẩu đúng
-            gotoChangePass("Dangvu01072004", "Vudang01072004@");
+            gotoChangePass("Vudang01072004@", "Dangvu01072004@");
             System.out.println("Tested correct password change.");
 
         } catch (Exception e) {
@@ -166,7 +166,6 @@ public class ProfileTest extends BaseTest {
             backButton.click();
             System.out.println("Navigated back from change password screen.");
 
-            navigateToProfile(); // Quay lại màn hình profile
         } catch (Exception e) {
             System.err.println("Error navigating back to profile: " + e.getMessage());
         }
